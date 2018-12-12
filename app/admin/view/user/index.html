@@ -1,0 +1,60 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb">
+        <i class="Hui-iconfont"></i>
+        <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">用户管理</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);"
+            title="刷新">
+            <i class="Hui-iconfont">&#xe68f;</i>
+        </a>
+    </nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <div class="text-c">
+
+            </div>
+            <div class="cl pd-5 bg-1 bk-gray mt-20 m-btngroup">
+                <span class="l">
+
+                </span>
+                <span class="r">共有数据：
+                    <strong>{$total}</strong> 条</span>
+            </div>
+            <div class="mt-20">
+                <table class="table table-border table-bordered table-bg table-hover table-sort">
+                    <thead>
+                        <tr class="text-c">
+                            <th width="100">昵称</th>
+                            <th width="80">头像</th>
+                            <th width="80">姓名</th>
+                            <th width="100">手机号</th>
+                            <th width="200">身份证号</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name='list' id='item'}
+                        <tr class="text-c">
+                            <td>{$item.nickname}</td>
+                            <td><img class="headimg" src="{$item.headimgurl}" alt=""></td>
+                            <td>{$item.name}</td>
+                            <td>{$item.mobile}</td>
+                            <td>{$item.code}</td>
+                            <td class="text-l">
+
+                            </td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+                {$page}
+            </div>
+        </article>
+    </div>
+</section>
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+
+</script>
+<!--请在上方写此页面业务相关的脚本-->

@@ -1,0 +1,116 @@
+<style>
+    .banner {
+
+    }
+</style>
+<section class="Hui-article-box">
+    <nav class="breadcrumb">
+        <i class="Hui-iconfont"></i>
+        <a href="{:url('admin/index/index')}" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">首页导航</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);"
+            title="刷新">
+            <i class="Hui-iconfont">&#xe68f;</i>
+        </a>
+    </nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <div class="text-c">
+
+            </div>
+            <div class="cl pd-5 bg-1 bk-gray mt-20 m-btngroup">
+                <span class="l">
+                    <a class="btn btn-primary radius" data-title="添加" onclick="add('添加','add.html?type=cate')" href="javascript:;">
+                        <i class="Hui-iconfont">&#xe600;</i> 添加</a>
+                </span>
+            </div>
+            <div class="mt-20">
+                <table class="table table-border table-bordered table-bg table-hover table-sort">
+                    <thead>
+                        <tr class="text-c">
+                            <th width="300">图片</th>
+                            <th>名称</th>
+                            <th width="120">跳转链接</th>
+                            <th width="80">状态</th>
+                            <th width="200">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name='list' id='item'}
+                        <tr class="text-c">
+                            <td><img src="{$item.imgurl}"></td>
+                            <td>{$item.title}</td>
+                            <td>{notempty  name="item.linkurl"}
+                                <a href="{$item.linkurl}" target="_blank">跳转地址</a>
+                                {/notempty}</td>
+                            <td>{$item.status?'<span class="label label-success radius">显示</span>':'<span class="label label-default radius">隐藏</span>'}</td>
+                            <td class="text-l">
+                                <a  class="text-primary" onClick="edit('查看','edit.html','?id={$item.id}')">查看</a>
+                                <a  class="text-primary" onClick="del(this,'del','{$item.id}')">删除</a>
+                            </td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </div>
+</section>
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+    $(function() {
+
+        uploadInit(function(res) {
+            console.log(res);
+        });
+    })
+
+    function uploadInit(call) {
+        var uploader = WebUploader.create({
+            auto: true, //开启自动上传
+            fileVal: 'image',
+            formData: {
+
+            },
+            swf: 'Uploader.swf',
+            server: '{:url("/api/upload_image")}',
+            pick: '#j-picker',
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/jpg,image/jpeg,image/png'
+            },
+            fileNumLimit: 9, // 图片数量限制
+            method:'post',
+            compress: {
+                width: 750,
+                // 图片质量，只有type为`image/jpeg`的时候才有效。
+                quality: 80,
+                // 如果发现压缩后文件大小比原来还大，则使用原来图片
+                // 此属性可能会影响图片自动纠正功能
+                noCompressIfLarger: false,
+                // 单位字节，如果图片大小小于此值，不会采用压缩。
+                compressSize: 100*1024
+            }
+        })
+        // 开始上传
+        uploader.on('startUpload', function(file) {
+
+        });
+        // 结束上传
+        uploader.on('uploadFinished', function(file) {
+
+        });
+        // 上传成功
+        uploader.on('uploadSuccess', function(file, res) {
+            call && call(res);
+        });
+        // 上传失败
+        uploader.on('uploadError', function(file, res) {
+
+        });
+    }
+</script>
+<!--请在上方写此页面业务相关的脚本-->

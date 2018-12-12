@@ -1,0 +1,36 @@
+/* 分页 */
+.pagination {
+    display: block;
+    padding: 15px;
+    text-align: center;
+}
+
+.pagination li {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    border: 1px solid #eee;
+    line-height: 30px;
+    text-align: center;
+}
+.pagination a {
+    display: block;
+    text-decoration: none;
+    color: #666;
+}
+.pagination li.active {
+    color: #eb5656;
+}
+.pagination li.disabled {
+    color: #999;
+}
+/* 表格工具栏 */
+.m-btngroup .r{
+    margin-top: 5px;
+}
+/* 表格 */
+.table .headimg {
+    width: 30px;
+    height: 30px;
+}

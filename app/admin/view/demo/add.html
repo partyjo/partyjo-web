@@ -1,0 +1,56 @@
+<article class="page-container">
+        <form class="form form-horizontal" id="form-article-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">
+                    <span class="c-red">*</span>标题：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="" placeholder="" id="" name="">
+                </div>
+            </div>
+            <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>内容：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <script id="editor" type="text/plain" style="width:100%;height:400px;"></script>
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button onClick="save();" class="btn btn-primary radius" type="submit">
+                        <i class="Hui-iconfont">&#xe632;</i> 保存</button>
+                </div>
+            </div>
+        </form>
+    </article>
+    <!--请在下方写此页面业务相关的脚本-->
+    <script src="__PUBLIC__/lib/ueditor/1.4.3/ueditor.config.js"></script>
+    </script>
+    </script>
+    <script src="__PUBLIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+    <script>
+    $(function () {
+        new Account();
+    });
+
+    function Index() {
+        if (!(this instanceof Index)) {
+            return new Index();
+        }
+        this.init();
+    }
+    Index.prototype = {
+        ue: null,
+        init: function () {
+            this.ue = UE.getEditor('editor');
+
+            this.handle();
+        },
+        handle: function() {
+
+            $('#j-submit').on('click',function() {
+                var data = form2Json('#j-form');
+            })
+        }
+    };
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

@@ -1,0 +1,68 @@
+<article class="page-container">
+    <form class="form form-horizontal" id="j-form">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>标题：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="title">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>简介：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <textarea class="textarea" name="summary" placeholder="200字以内"></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>跳转地址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="http://" id="" name="linkurl">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button id="j-submit" class="btn btn-primary radius" type="button">
+                    <i class="Hui-iconfont">&#xe632;</i> 保存</button>
+            </div>
+        </div>
+    </form>
+</article>
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+    $(function () {
+        new Index();
+    });
+
+    function Index() {
+        if (!(this instanceof Index)) {
+            return new Index();
+        }
+        this.init();
+    }
+    Index.prototype = {
+        submitBtn: null,
+        init: function () {
+            this.submitBtn = $('#j-submit');
+
+            this.handle();
+        },
+        handle: function() {
+            var _this = this;
+
+            this.submitBtn.on('click',function() {
+                var data = form2Json('#j-form');
+                request('{:url("save")}',data,function(res) {
+                    if (res.ret == 1) {
+                        _this.submitBtn.addClass('disabled ');
+                        _this.submitBtn.off();
+                    }
+                    layer.msg(res.msg);
+                })
+            })
+        }
+
+    };
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

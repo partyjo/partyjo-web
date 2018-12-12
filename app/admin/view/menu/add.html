@@ -1,0 +1,120 @@
+<article class="page-container">
+    <form class="form form-horizontal" id="j-form">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red"></span>名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="title">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>图片：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <div id="j-picker">上传</div>
+                <input type="text" class="input-text" value="" placeholder="" id="j-imgurl" name="imgurl">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>跳转地址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="linkurl">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button id="j-submit" class="btn btn-primary radius" type="button">
+                    <i class="Hui-iconfont">&#xe632;</i> 保存</button>
+            </div>
+        </div>
+    </form>
+</article>
+<!--请在下方写此页面业务相关的脚本-->
+<link rel="stylesheet" href="__PUBLIC__/lib/webuploader/0.1.5/webuploader.css">
+<script src="__PUBLIC__/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script>
+    $(function () {
+        new Index();
+    });
+
+    function Index() {
+        if (!(this instanceof Index)) {
+            return new Index();
+        }
+        this.init();
+    }
+    Index.prototype = {
+        submitBtn: null,
+        init: function () {
+            this.submitBtn = $('#j-submit');
+
+            this.uploadInit(function(res) {
+                $('#j-imgurl').val(res.data.file_path);
+            })
+            this.handle();
+        },
+        handle: function() {
+            var _this = this;
+
+            this.submitBtn.on('click',function() {
+                var data = form2Json('#j-form');
+                    data.type = getUrlPara('type');
+                request('{:url("save")}',data,function(res) {
+                    if (res.ret == 1) {
+                        _this.submitBtn.addClass('disabled ');
+                        _this.submitBtn.off();
+                    }
+                    layer.msg(res.msg);
+                })
+            })
+        },
+        uploadInit: function(call) {
+            var uploader = WebUploader.create({
+                auto: true, //开启自动上传
+                fileVal: 'image',
+                formData: {
+
+                },
+                swf: 'Uploader.swf',
+                server: '{:url("/api/upload_image")}',
+                pick: '#j-picker',
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/jpg,image/jpeg,image/png'
+                },
+                fileNumLimit: 9, // 图片数量限制
+                method:'post',
+                compress: {
+                    width: 750,
+                    // 图片质量，只有type为`image/jpeg`的时候才有效。
+                    quality: 80,
+                    // 如果发现压缩后文件大小比原来还大，则使用原来图片
+                    // 此属性可能会影响图片自动纠正功能
+                    noCompressIfLarger: false,
+                    // 单位字节，如果图片大小小于此值，不会采用压缩。
+                    compressSize: 100*1024
+                }
+            })
+            // 开始上传
+            uploader.on('startUpload', function(file) {
+
+            });
+            // 结束上传
+            uploader.on('uploadFinished', function(file) {
+
+            });
+            // 上传成功
+            uploader.on('uploadSuccess', function(file, res) {
+                call && call(res);
+            });
+            // 上传失败
+            uploader.on('uploadError', function(file, res) {
+
+            });
+        }
+    };
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
