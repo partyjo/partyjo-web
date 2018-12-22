@@ -8,16 +8,7 @@ class Task extends ApiBase
 	{
 		$url = $this->apis['GetLobby'];
 		$res = $this->postUrl($url,$this->paras);
-		$data = json_decode($res,true);
-		var_dump($data);
-		if ($data['status']['code'] == 200 && $data['custom']['code'] == 1) {
-			$this->code = 1;
-			$this->data = $data['custom']['halllist'];
-		} else {
-			$this->code = 101;
-      $this->msg = $data['status']['text'];
-		}
-		// $this->dataFiltering($res);
+		$this->dataFiltering($res);
 
 		return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	}

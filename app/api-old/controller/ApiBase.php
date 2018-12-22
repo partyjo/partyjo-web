@@ -31,7 +31,7 @@ class ApiBase extends Controller
         $this->paras['ValidateData'] = '';
         $this->paras['paras'] = "";
 
-        $this->apiUrl = 'https://yc.huzhou.gov.cn:8088/wsdt/rest/hzqueueAppointment';
+        $this->apiUrl = 'http://xzfw.zjcx.gov.cn/cxweb/WeiXinAPI';
         $this->apiList();
 
         $this->before();
@@ -53,7 +53,7 @@ class ApiBase extends Controller
         /**
          * 大厅列表
          */
-        $this->apis['GetLobby'] = $this->apiUrl.'/getHallList';
+        $this->apis['GetLobby'] = $this->apiUrl.'/Queue/GetLobby';
         /**
          * 部门列表
          * "LobbyType": "大厅类型（传空返回所有）
