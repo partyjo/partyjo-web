@@ -2,13 +2,18 @@
 use think\Route;
 
 Route::rule('api/test','api/test/index');
+Route::rule('api/index','api/index/index');
 
+Route::rule('api/getAppUserInfo','api/login/getAppUserInfo');
 Route::rule('api/getTaskKindOU_YY','api/yuyue/getTaskKindOU_YY');
 Route::rule('api/getTaskList_YY','api/yuyue/getTaskList_YY');
 Route::rule('api/getYuYueDateList','api/yuyue/getYuYueDateList');
 Route::rule('api/getYuYueTimeList','api/yuyue/getYuYueTimeList');
 Route::rule('api/getYuYueQNO','api/yuyue/getYuYueQNO');
 Route::rule('api/getAppointmentList','api/yuyue/getAppointmentList');
+Route::rule('api/getAppointDetail','api/yuyue/getAppointDetail');
+Route::rule('api/Getwaitnumbytime','api/yuyue/Getwaitnumbytime');
+
 
 Route::rule('api/getProjectByFlowSN','api/project/getProjectByFlowSN');
 Route::rule('api/getProjectDetail','api/project/getProjectDetail');

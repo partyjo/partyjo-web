@@ -7,51 +7,54 @@ class Task extends ApiBase
 	public function getLobby()
 	{
 		$url = $this->apis['GetLobby'];
-		$res = $this->postUrl($url,$this->paras);
-		$data = json_decode($res,true);
-		var_dump($data);
-		if ($data['status']['code'] == 200 && $data['custom']['code'] == 1) {
-			$this->code = 1;
-			$this->data = $data['custom']['halllist'];
+		$res = $this->handle($this->postUrl($url,$this->paras));
+		if ($res['code'] == 1) {
+			$this->data = $res['data']['halllist'];
 		} else {
 			$this->code = 101;
-      $this->msg = $data['status']['text'];
+      $this->msg = $res['msg'];
 		}
-		// $this->dataFiltering($res);
 
 		return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	}
 
 	public function getTaskKindOU()
 	{
-		$paras['LobbyType'] = empty(input('post.lobbyType'))?'':input('post.lobbyType');
-		$this->paras['paras'] = $paras;
+		$this->paras['params']['hallguid'] = input('lobbyType');
+		$this->paras['params']['shownum'] = input('pageSize') ? input('pageSize'): 10;
 
 		$url = $this->apis['GetTaskKindOU'];
-		$res = $this->postUrl($url,$this->paras);
-		$this->dataFiltering($res);
+		$res = $this->handle($this->postUrl($url,$this->paras));
+		if ($res['code'] == 1) {
+			$this->data = $res['data']['themelist'];
+		} else {
+			$this->code = 101;
+      $this->msg = $res['msg'];
+		}
 
 		return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	}
 
 	public function getTaskList()
 	{
-		$data = input('post.');
-		$paras = "";
+		$data = input('');
 
 		if (!isset($data['oUGuid']) || empty($data['oUGuid'])) {
 			$this->code = 0;
 			$this->msg = '缺少参数';
 		} else {
-			$paras['OUGuid'] = $data['oUGuid'];
-			$paras['CurrentPageIndex'] = isset($data['pageIndex'])?$data['pageIndex']:1;
-			$paras['PageSize'] = isset($data['pageSize'])?$data['pageSize']:10;
-			$this->paras['paras'] = $paras;
+			$this->paras['params']['themeguid'] = $data['oUGuid'];
+			$this->paras['params']['shownum'] = isset($data['pageSize']) ? $data['pageSize'] : 10;
 			$url = $this->apis['GetTaskList'];
-			$res = $this->postUrl($url,$this->paras);
-			$this->dataFiltering($res);
+			$res = $this->handle($this->postUrl($url,$this->paras));
+			if ($res['code'] == 1) {
+				$this->data = $res['data']['themelist'];
+			} else {
+				$this->code = 101;
+				$this->msg = $res['msg'];
+			}
 		}
-
+	
 		return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	}
 

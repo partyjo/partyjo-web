@@ -28,8 +28,11 @@ class ApiBase extends Controller
 
         $this->userInfo = $this->getUserInfo();
 
-        $this->paras['ValidateData'] = '';
-        $this->paras['paras'] = "";
+        // $this->paras['ValidateData'] = '';
+        $this->paras['params'] = [
+            'centerguid' => '6bef18db-f0b8-49fd-9d39-e406ad6d5bd5'
+        ];
+        $this->paras['token'] = 'Epoint_WebSerivce_**##0601';
 
         $this->apiUrl = 'https://yc.huzhou.gov.cn:8088/wsdt/rest/hzqueueAppointment';
         $this->apiList();
@@ -46,27 +49,50 @@ class ApiBase extends Controller
 
     }
 
+    protected function handle($res) {
+        $res = json_decode($res,true);
+        // var_dump($res);
+        $r = [];
+        $msg = '请求成功';
+        if ($res['status']['code'] == 200 && $res['custom']['code'] == 1) {
+            $r['code'] = 1;
+            $r['data'] = $res['custom'];
+        } else {
+            $r['code'] = 101;
+            $res['data'] = null;
+            $msg = '发生异常';
+        }
+        $r['msg'] = empty($res['custom']['text']) ? empty($res['status']['text']) ? $msg : $res['status']['text'] : $res['custom']['text'];
+        return $r;
+    }
+
     protected function apiList()
     {
         // 办事指南
 
         /**
          * 大厅列表
+         * centerguid: 001008005004026
          */
         $this->apis['GetLobby'] = $this->apiUrl.'/getHallList';
         /**
          * 部门列表
-         * "LobbyType": "大厅类型（传空返回所有）
+         * "hallguid": 大厅id
+         * shownum: 10
          */
-        $this->apis['GetTaskKindOU'] = $this->apiUrl.'/TaskKind/GetTaskKindOU';
+        $this->apis['GetTaskKindOU'] = $this->apiUrl.'/getHallThemes';
         /**
          * 事项列表
          * "TaskName": "事项名称",  //搜索不传空，默认传控
-         * "OUGuid": "部门guid",
-         * "CurrentPageIndex": "1",
-         * "PageSize": "10"
+         * "themeguid": "部门guid",
+         * "shownum": 10
          */
-        $this->apis['GetTaskList'] = $this->apiUrl.'/AuditTask/GetTaskList';
+        $this->apis['GetTaskList'] = $this->apiUrl.'/getChildThemes';
+        /**
+         * 获取浙报APP用户
+         * nxwxticket: 
+         */
+        $this->apis['getAppUserinfo'] = $this->apiUrl.'/getUserinfo';
         /**
          * 事项详情
          * "TaskGuid": "事项guid"
@@ -79,7 +105,7 @@ class ApiBase extends Controller
          * 选择部门
          * "LobbyType": "大厅类型（传空返回所有）"
          */
-        $this->apis['GetTaskKindOU_YY'] = $this->apiUrl.'/TaskKind/GetTaskKindOU_YY';
+        //$this->apis['GetTaskKindOU_YY'] = $this->apiUrl.'/TaskKind/GetTaskKindOU_YY';
 
         /**
          * 选择事项
@@ -88,20 +114,36 @@ class ApiBase extends Controller
          * "CurrentPageIndex": "1",
          * "PageSize": "10"
          */
-        $this->apis['GetTaskList_YY'] = $this->apiUrl.'/Queue/GetTaskList';
+        //$this->apis['GetTaskList_YY'] = $this->apiUrl.'/Queue/GetTaskList';
 
         /**
          * 获取预约日期
-         * "ShowDays":"5"显示天数
+         * "centerguid"
+         * showdays
          */
-        $this->apis['GetYuYueDateList'] = $this->apiUrl.'/AuditAppointment/GetYuYueDateList';
+        $this->apis['GetYuYueDateList'] = $this->apiUrl.'/getAppointDate';
 
         /**
           * 获取预约时间段
-          * "TaskGuid":"6548f82c-f302-4d77-abbb-51dfea5c232c",
-          * "YuYueDate":"2016-04-22"
+          * accountguid
+          * centerguid
+          * "taskguid":"6548f82c-f302-4d77-abbb-51dfea5c232c",
+          * "appointdate":"2016-04-22"
           */
-        $this->apis['GetYuYueTimeList'] = $this->apiUrl.'/AuditAppointment/GetYuYueTimeList';
+        $this->apis['GetYuYueTimeList'] = $this->apiUrl.'/getAppointTime';
+
+        /**
+         * 获取各时段预约人数
+         * centerguid
+         * taskguid
+         */
+        $this->apis['getWaitNumbyTime'] = $this->apiUrl.'/getWaitNumbyTime';
+
+         /**
+         * 取消预约
+         * appointguid
+         */
+        $this->apis['deleteAppoint'] = $this->apiUrl.'/deleteAppoint';
 
         /**
           * 提交预约
@@ -114,18 +156,24 @@ class ApiBase extends Controller
           * "YuYueTimeEnd":"10:00",//预约结束时间
           * "YuYueDate":"2016-04-22"//预约时间
           */
-        $this->apis['GetYuYueQNO'] = $this->apiUrl.'/AuditAppointment/GetYuYueQNO';
+        $this->apis['GetYuYueQNO'] = $this->apiUrl.'/getAppointQno';
 
         /**
-         * 预约查询
-         * "IDCardNO":"身份证",
-         * "Phone":"手机号",
-         * "ShowType":"今日预约传yjyy 历史预约传空",
+         * 预约列表
+         * accountguid
+         * currentpage: 1
+         * pagesize: 10
+         * "type": 1 今日 2 历史
          * "CurrentPageIndex":"1",
          * "PageSize":"10"
          */
-        $this->apis['GetAppointmentList'] = $this->apiUrl.'/Queue/getAppointmentList';
+        $this->apis['GetAppointmentList'] = $this->apiUrl.'/getAppointList';
 
+        /**
+         * 预约详情
+         * appointguid
+         */
+        $this->apis['getAppointDetail'] = $this->apiUrl.'/getAppointDetail';
         /**
          * 办事查询编号
          * "FlowSN": "办件流水号",
@@ -141,6 +189,7 @@ class ApiBase extends Controller
 
     protected function postUrl($url, $data)
     {
+        // var_dump(json_encode($data));
         $curl = curl_init(); // 启动一个CURL会话
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // 对认证证书来源的检查
@@ -153,7 +202,7 @@ class ApiBase extends Controller
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);         // 设置超时限制 防止死循环
         curl_setopt($curl, CURLOPT_HEADER, 0);           // 显示返回的Header区域内容
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   // 获取的信息以文件流的形式返回
-
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
         $tmpInfo = curl_exec($curl); // 执行操作
         if(curl_errno($curl)) {
            $tmpInfo = 'Errno'.curl_error($curl);

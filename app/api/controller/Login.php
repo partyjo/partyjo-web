@@ -12,6 +12,20 @@ class Login extends ApiBase
 		$this->db = Db::name('user');
 	}
 
+	public function getAppUserInfo() {
+		$url = $this->apis['getAppUserinfo'];
+		$this->paras['nxwxticket'] = 'b309ffca-7331-431e-a5f3-ff04523c4852';
+		$res = $this->handle($this->postUrl($url,$this->paras));
+		if ($res['code'] == 1) {
+			$this->data = $res['data'];
+		} else {
+			$this->code = 101;
+      $this->msg = $res['msg'];
+		}
+
+		return $this->ajaxReturn($this->code, $this->msg, $this->data);
+	}
+
 	public function index()
 	{
 		$ticket = input('post.ticket');
