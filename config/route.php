@@ -4,7 +4,6 @@ use think\Route;
 Route::rule('api/test','api/test/index');
 Route::rule('api/index','api/index/index');
 
-Route::rule('api/getAppUserInfo','api/login/getAppUserInfo');
 Route::rule('api/getTaskKindOU_YY','api/yuyue/getTaskKindOU_YY');
 Route::rule('api/getTaskList_YY','api/yuyue/getTaskList_YY');
 Route::rule('api/getYuYueDateList','api/yuyue/getYuYueDateList');
@@ -31,6 +30,10 @@ Route::rule('api/is_login','api/user/isLogin');
 Route::rule('api/is_register','api/user/isRegister');
 Route::rule('api/register','api/user/register');
 Route::rule('api/loginOut','api/user/loginOut');
+Route::rule('api/getUserByOpenid','api/login/getUserByOpenid');
+Route::rule('api/wxUserBind','api/login/wxUserBind');
+Route::rule('api/wxUserRegister','api/login/wxUserRegister');
+Route::rule('api/getAppUserInfo','api/login/getAppUserInfo');
 
 Route::rule('api/login','api/login/index');
 Route::rule('api/login2','api/login/login2');

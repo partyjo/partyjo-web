@@ -9,6 +9,13 @@ class Test extends ApiBase
 
 	public function index()
 	{
+		$aData = array(
+			'name' => 'testdata',
+			'email' => 'test123@163.com'
+		);
+		$aHeader = array('Content-Length: ' . strlen($aData)), 'language:zh');
+		var_dump($aHeader);
+		exit();
 		//phpinfo();
 		$this->servicecode = 'cxwxgz';
 		$this->servicepwd = 'cxwxgzpwd';

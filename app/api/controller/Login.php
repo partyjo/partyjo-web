@@ -11,6 +11,99 @@ class Login extends ApiBase
 		$this->servicepwd = 'cxwxgzpwd';
 		$this->db = Db::name('user');
 	}
+	
+
+	public function wxUserBind() {
+		$data = input('');
+
+		if (!isset($data['mobile']) || empty($data['mobile'])) {
+			$this->code = 0;
+      $this->msg = '账号必须填写';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+		if (!isset($data['password']) || empty($data['password'])) {
+			$this->code = 0;
+      $this->msg = '密码必须填写';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+		if (!isset($data['openid']) || empty($data['openid'])) {
+			$this->code = 0;
+      $this->msg = '您还没有微信登录';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+
+		$url = $this->apis['wxUserBind'];
+		$this->paras['params']['idnumormobile'] = $data['mobile'];
+		$this->paras['params']['password'] = $data['password'];
+		$this->paras['params']['openid'] = $data['openid'];
+		$this->paras['params']['encodepassword'] = $data['encodepassword'];
+
+		$res = $this->handle($this->postUrl($url,$this->paras));
+		if ($res['code'] == 1) {
+			$this->data = $res['data'];
+		} else {
+			$this->code = 2003;
+      $this->msg = $res['msg'];
+		}
+
+		return $this->ajaxReturn($this->code, $this->msg, $this->data);
+	}
+	
+	public function wxUserRegister() {
+		$data = input('');
+
+		if (!isset($data['username']) || empty($data['username'])) {
+			$this->code = 0;
+      $this->msg = '姓名必须填写';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+		if (!isset($data['password']) || empty($data['password'])) {
+			$this->code = 0;
+      $this->msg = '密码必须填写';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+		if (!isset($data['mobile']) || empty($data['mobile'])) {
+			$this->code = 0;
+      $this->msg = '手机号必须填写';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+		if (!isset($data['idnum']) || empty($data['idnum'])) {
+			$this->code = 0;
+      $this->msg = '身份证号必须填写';
+			return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		}
+
+		$url = $this->apis['wxUserRegister'];
+		$this->paras['params']['username'] = $data['username'];
+		$this->paras['params']['password'] = $data['password'];
+		$this->paras['params']['mobile'] = $data['mobile'];
+		$this->paras['params']['idnum'] = $data['idnum'];
+		$res = $this->handle($this->postUrl($url,$this->paras));
+		if ($res['code'] == 1) {
+			$this->data = $res['data'];
+		} else {
+			$this->code = 2002;
+      $this->msg = $res['msg']; // 注册失败
+		}
+
+		return $this->ajaxReturn($this->code, $this->msg, $this->data);
+	}
+	public function getUserByOpenid() {
+		$url = $this->apis['getUserByOpenid'];
+		$this->paras['params']['openid'] = input('openid');
+		$res = $this->handle($this->postUrl($url,$this->paras));
+		if ($res['code'] == 1) {
+			$this->data = $res['data'];
+			if ($this->userInfo) {
+				$this->data['headimgurl'] = $this->userInfo['headimgurl'];
+			}
+		} else {
+			$this->code = 2001;
+      $this->msg = $res['msg']; //  未注册
+		}
+
+		return $this->ajaxReturn($this->code, $this->msg, $this->data);
+	}
 
 	public function getAppUserInfo() {
 		$url = $this->apis['getAppUserinfo'];
