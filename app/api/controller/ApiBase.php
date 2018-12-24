@@ -52,7 +52,7 @@ class ApiBase extends Controller
 
     protected function handle($res) {
         $res = json_decode($res,true);
-        var_dump($res);
+        // var_dump($res);
         $r = [];
         $msg = '请求成功';
         if ($res['status']['code'] == 200 && $res['custom']['code'] == 1) {
@@ -135,7 +135,7 @@ class ApiBase extends Controller
           * "taskguid":"6548f82c-f302-4d77-abbb-51dfea5c232c",
           * "appointdate":"2016-04-22"
           */
-        $this->apis['GetYuYueTimeList'] = $this->apiUrl.'/getAppointTime';
+        $this->apis['GetYuYueTimeList'] = $this->apiUrl.'/private/getAppointTime';
 
         /**
          * 获取各时段预约人数
@@ -161,7 +161,7 @@ class ApiBase extends Controller
           * "YuYueTimeEnd":"10:00",//预约结束时间
           * "YuYueDate":"2016-04-22"//预约时间
           */
-        $this->apis['GetYuYueQNO'] = $this->apiUrl.'/getAppointQno';
+        $this->apis['GetYuYueQNO'] = $this->apiUrl.'/private/getAppointQno';
 
         /**
          * 预约列表
@@ -172,7 +172,7 @@ class ApiBase extends Controller
          * "CurrentPageIndex":"1",
          * "PageSize":"10"
          */
-        $this->apis['GetAppointmentList'] = $this->apiUrl.'/getAppointList';
+        $this->apis['GetAppointmentList'] = $this->apiUrl.'/private/getAppointList';
 
         /**
          * 预约详情
@@ -216,14 +216,14 @@ class ApiBase extends Controller
         curl_setopt($curl, CURLOPT_HEADER, 0);           // 显示返回的Header区域内容
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   // 获取的信息以文件流的形式返回
         
-        var_dump($header);
+        // var_dump($header);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         $tmpInfo = curl_exec($curl); // 执行操作
         if(curl_errno($curl)) {
            $tmpInfo = 'Errno'.curl_error($curl);
         }
         // $a = curl_getinfo($curl);
-        var_dump($tmpInfo);
+        // var_dump($tmpInfo);
         curl_close($curl); // 关闭CURL会话
         return $tmpInfo; // 返回数据
     }
