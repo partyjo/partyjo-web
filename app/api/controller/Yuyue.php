@@ -56,6 +56,34 @@ class Yuyue extends ApiBase
 	public function getYuYueTimeList()
 	{
 		$data = input('');
+
+		if (!isset($data['taskGuid'])) {
+			$this->code = 0;
+			$this->msg = '缺少参数 taskGuid';
+		} else if (!isset($data['yuYueDate'])) {
+			$this->code = 0;
+			$this->msg = '缺少参数 yuYueDate';
+		} else {
+			$this->paras['params']['accountguid'] = '';
+			$this->paras['params']['taskguid'] = $data['taskGuid'];
+			$this->paras['params']['appointdate'] = $data['yuYueDate'];
+			var_dump($this->paras);
+			$url = $this->apis['GetYuYueTimeList'];
+			$res = $this->handle($this->postUrl($url,$this->paras,$data['token']));
+			if ($res['code'] == 1) {
+				$this->data = $res['data']['appointdatelist'];
+			} else {
+				$this->code = 101;
+				$this->msg = $res['msg'];
+			}
+		}
+
+		return $this->ajaxReturn($this->code, $this->msg, $this->data);
+	}
+
+	public function getYuYueTimeListCopy()
+	{
+		$data = input('');
 		// ---
 		if ($data['yuYueDate'] == '2018-12-24') {
 			$d = [
