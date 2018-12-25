@@ -37,6 +37,7 @@ Route::rule('api/getAppUserInfo','api/login/getAppUserInfo');
 
 Route::rule('api/login','api/login/index');
 Route::rule('api/login2','api/login/login2');
+Route::rule('api/getAppInfo','api/login/getInfo');
 
 Route::rule('api/get_wxsdk','api/weixin/getWxsdk');
 

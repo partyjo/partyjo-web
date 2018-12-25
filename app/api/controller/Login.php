@@ -121,7 +121,8 @@ class Login extends ApiBase
 
 	public function index()
 	{
-		$ticket = input('post.ticket');
+		$ticket = input('ticket');
+		// return $this->ajaxReturn($this->code, $this->msg, $ticket);
 		//$ticket = '8afac2ed6069c81501606f571e763a70-ticket';
 		$time = date('YmdHis');
 		$sign = md5($this->servicecode.$this->servicepwd.$time);
@@ -133,28 +134,59 @@ class Login extends ApiBase
 			$this->code = 0;
 			$this->msg = $res['errmsg'];
 		} else {
-			$userinfo = $this->getInfo($res['token']);
-			if ($userinfo['result'] != 0) {
-				$this->code = 0;
-				$this->msg = $userinfo['errmsg'];
-			} else {
-				$this->data = $this->register($userinfo);
-				$this->msg = '登陆成功';
-			}
+			$this->data = $res['token'];
 		}
 
 		return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	}
 
-	protected function getInfo($token)
+	// public function index()
+	// {
+	// 	$ticket = input('post.ticket');
+	// 	//$ticket = '8afac2ed6069c81501606f571e763a70-ticket';
+	// 	$time = date('YmdHis');
+	// 	$sign = md5($this->servicecode.$this->servicepwd.$time);
+
+	// 	$url = 'https://puser.zjzwfw.gov.cn/sso/servlet/simpleauth?method=ticketValidation&servicecode='.$this->servicecode.'&time='.$time.'&sign='.$sign.'&datatype=json&st='.$ticket;
+
+	// 	$res = json_decode($this->postUrl($url,[]),true);
+	// 	if ($res['result'] != 0) {
+	// 		$this->code = 0;
+	// 		$this->msg = $res['errmsg'];
+	// 	} else {
+	// 		$userinfo = $this->getInfo($res['token']);
+	// 		if ($userinfo['result'] != 0) {
+	// 			$this->code = 0;
+	// 			$this->msg = $userinfo['errmsg'];
+	// 		} else {
+	// 			$this->data = $this->register($userinfo);
+	// 			$this->msg = '登陆成功';
+	// 		}
+	// 	}
+
+	// 	return $this->ajaxReturn($this->code, $this->msg, $this->data);
+	// }
+
+	public function getInfo($token)
 	{
 
 		$time = date('YmdHis');
 		$sign = md5($this->servicecode.$this->servicepwd.$time);
 		$url = 'https://puser.zjzwfw.gov.cn/sso/servlet/simpleauth?method=getUserInfo&servicecode='.$this->servicecode.'&time='.$time.'&sign='.$sign.'&datatype=json&token='.$token;
 
+		
+		$userinfo = json_decode($this->postUrl($url,[]),true);
 
-		return json_decode($this->postUrl($url,[]),true);
+		// $userinfo = $this->getInfo($res['token']);
+		
+		if ($userinfo['result'] != 0) {
+			$this->code = 0;
+			$this->msg = $userinfo['errmsg'];
+		} else {
+			$this->data = $userinfo;
+			$this->msg = '登陆成功';
+		}
+		return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	}
 
 	protected function register($user)

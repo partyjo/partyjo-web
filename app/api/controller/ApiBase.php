@@ -22,6 +22,7 @@ class ApiBase extends Controller
      */
     protected function _initialize()
     {
+        // header("Access-Control-Allow-Origin: *");
         $this->code = 1;
         $this->msg = '';
         $this->data = null;
