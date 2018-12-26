@@ -56,14 +56,15 @@ class User extends Base
       $wxOauthBack = $weixin->getOauthUrl($url);
 			$this->res = $wxOauthBack;
     } else {
-			$userInfo = $this->db->where('openid',$token['openid'])->find();
-			if ($userInfo) {
-				$this->setUserInfo($userInfo);
-				$this->res = $userInfo;
-			} else {
-				$this->code = 1002;
-				$this->res = $token;
-			}
+			// $userInfo = $this->db->where('openid',$token['openid'])->find();
+			// if ($userInfo) {
+			// 	$this->setUserInfo($userInfo);
+			// 	$this->res = $userInfo;
+			// } else {
+			// 	$this->code = 1002;
+			// 	$this->res = $token;
+			// }
+			$this->res = $token;
 			$this->msg = '用户已授权';
 		}
 
