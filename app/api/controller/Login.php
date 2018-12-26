@@ -135,6 +135,14 @@ class Login extends ApiBase
 			$this->msg = $res['errmsg'];
 		} else {
 			$this->data = $res['token'];
+			$userinfo = $this->getInfo($res['token']);
+			if ($userinfo['result'] != 0) {
+				$this->code = 0;
+				$this->msg = $userinfo['errmsg'];
+			} else {
+				$this->data = $userinfo;
+				$this->msg = '登陆成功';
+			}
 		}
 
 		return $this->ajaxReturn($this->code, $this->msg, $this->data);
@@ -167,7 +175,7 @@ class Login extends ApiBase
 	// 	return $this->ajaxReturn($this->code, $this->msg, $this->data);
 	// }
 
-	public function getInfo($token)
+	protected function getInfo($token)
 	{
 
 		$time = date('YmdHis');
@@ -175,18 +183,7 @@ class Login extends ApiBase
 		$url = 'https://puser.zjzwfw.gov.cn/sso/servlet/simpleauth?method=getUserInfo&servicecode='.$this->servicecode.'&time='.$time.'&sign='.$sign.'&datatype=json&token='.$token;
 
 		
-		$userinfo = json_decode($this->postUrl($url,[]),true);
-
-		// $userinfo = $this->getInfo($res['token']);
-		
-		if ($userinfo['result'] != 0) {
-			$this->code = 0;
-			$this->msg = $userinfo['errmsg'];
-		} else {
-			$this->data = $userinfo;
-			$this->msg = '登陆成功';
-		}
-		return $this->ajaxReturn($this->code, $this->msg, $this->data);
+		return json_decode($this->postUrl($url,[]),true);
 	}
 
 	protected function register($user)
