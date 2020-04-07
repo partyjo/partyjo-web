@@ -2,6 +2,12 @@
 namespace app\api\controller;
 use think\Controller;
 
+header('Access-Control-Allow-Origin:*');  
+// 响应类型  
+header('Access-Control-Allow-Methods:*');  
+// 响应头设置  
+header('Access-Control-Allow-Headers:x-requested-with,content-type');
+
 class ApiBase extends Controller
 {
     protected $paras; // 请求api的参数
@@ -22,7 +28,6 @@ class ApiBase extends Controller
      */
     protected function _initialize()
     {
-        // header("Access-Control-Allow-Origin: *");
         $this->code = 1;
         $this->msg = '';
         $this->data = null;
@@ -283,23 +288,23 @@ class ApiBase extends Controller
     //获取登陆信息
     protected function getUserInfo()
     {
-        return session('ZM_USER_INFO');
+        return session('ZM_USER_INFO_1');
     }
     //存储登陆信息
     protected function setUserInfo($info)
     {
-        return session('ZM_USER_INFO',$info);
+        return session('ZM_USER_INFO_1',$info);
     }
     //获取授权信息
     protected function getToken()
     {
-        return [
-                'openid'=>'o9-y-0zpSkPbcDqRpUel0kK50Adc',
-                'nickname'=>'阿敏',
-                'headimgurl'=>'http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3yW0arVaSoatJVz8AHdyW59tia3HJHk2s5sP9v6o3JpBqN1Hm8jSgNDxPwgxhwV42USic22PZPnDw/0',
-                'sex'=>1
-            ];
-        return session('ZM_WX_OAUTH_INFO');
+        // return [
+        //         'openid'=>'o9-y-0zpSkPbcDqRpUel0kK50Adc',
+        //         'nickname'=>'阿敏',
+        //         'headimgurl'=>'http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3yW0arVaSoatJVz8AHdyW59tia3HJHk2s5sP9v6o3JpBqN1Hm8jSgNDxPwgxhwV42USic22PZPnDw/0',
+        //         'sex'=>1
+        //     ];
+        return session('ZM_WX_OAUTH_INFO_1');
     }
 
 }

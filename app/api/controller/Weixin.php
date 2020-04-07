@@ -18,7 +18,7 @@ class Weixin extends Base
     public function clear()
     {
         dump($this->url['HTTP_HOST'].$this->url['ROOT']);
-        session('ZM_WX_OAUTH_INFO',null);
+        session('ZM_WX_OAUTH_INFO_1',null);
     }
 
     // 微信授权地址
@@ -79,7 +79,7 @@ class Weixin extends Base
     // 缓存授权信息
     protected function setToken($token)
     {
-        return session('ZM_WX_OAUTH_INFO',$token);
+        return session('ZM_WX_OAUTH_INFO_1',$token);
     }
 
 }

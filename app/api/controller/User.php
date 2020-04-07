@@ -41,8 +41,8 @@ class User extends Base
 	}
 
 	public function loginOut() {
-		session('ZM_USER_INFO',null);
-		session('ZM_WX_OAUTH_INFO',null);
+		session('ZM_USER_INFO_1',null);
+		session('ZM_WX_OAUTH_INFO_1',null);
 	}
 
 	// 是否授权
@@ -95,8 +95,8 @@ class User extends Base
 			$userInfo = $this->db->where('openid',$token['openid'])->find();
 			if ($userInfo) {
 				$this->setUserInfo($userInfo);
-                $this->res = $userInfo;
-            } else {
+        $this->res = $userInfo;
+      } else {
 				$data['openid'] = $token['openid'];
 				$data['nickname'] = $token['nickname'];
 				$data['headimgurl'] = $token['headimgurl'];
